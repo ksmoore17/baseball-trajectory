@@ -92,6 +92,14 @@ impl State {
             hang_time: self.hang_time + delta,
         }
     }
+
+    pub fn get_position(&self) -> (f32, f32, f32) {
+        (self.position[0], self.position[1], self.position[2])
+    }
+
+    pub fn get_velocity(&self) -> (f32, f32, f32) {
+        (self.velocity[0], self.velocity[1], self.velocity[2])
+    }
 }
 
 pub struct Trajectory {
