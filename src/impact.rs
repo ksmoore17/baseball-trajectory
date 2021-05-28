@@ -21,17 +21,18 @@ pub struct Impact {
 }
 
 impl Impact {
-    pub fn calculate_initial_velocity(&self) -> Vector3<f32> {
+    pub fn calculate_velocity(exit_speed: f32, launch_angle: f32, direction: f32) -> (f32, f32, f32) {
         // getting these as unit vector
-        let x = (self.launch_angle * PI / 180.0).cos() * (self.direction * PI / 180.0).sin();
-        let y = (self.launch_angle * PI / 180.0).cos() * (self.direction * PI / 180.0).cos();
-        let z = (self.launch_angle * PI / 180.0).sin();
+        let x = (launch_angle * PI / 180.0).cos() * (direction * PI / 180.0).sin();
+        let y = (launch_angle * PI / 180.0).cos() * (direction * PI / 180.0).cos();
+        let z = (launch_angle * PI / 180.0).sin();
 
         // scaling to magnitude
-        Vector3::new(x, y, z) * 1.467 * self.exit_speed
+        let magnitude = 1.467 * exit_speed;
+        (x * magnitude, y * magnitude, z * magnitude)
     }
 
-    pub fn calculate_cartesian_spin(&self, velocity: Vector3<f32>) -> Vector3<f32> {
+    pub fn calculate_cartesian_spin(&self, velocity: &Vector3<f32>) -> Vector3<f32> {
         // spins are constant from the initial velocity
 
         let x = (

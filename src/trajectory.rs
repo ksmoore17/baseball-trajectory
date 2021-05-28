@@ -27,12 +27,18 @@ impl Constants {
     pub fn from_conditions(ball: &Ball, environment: &Environment, impact: &Impact) -> Self {
         let rho = environment.calculate_rho();
         let c_0 = calculate_c_0(ball.mass, ball.circumference, rho);
+
         let initial_position = Vector3::new(impact.x, impact.y, impact.z);
-        let initial_velocity = impact.calculate_initial_velocity();
+
+        let velocity_tuple = Impact::calculate_velocity(impact.exit_speed, impact.launch_angle, impact.direction);
+        let initial_velocity = Vector3::new(velocity_tuple.0, velocity_tuple.1, velocity_tuple.2);
+
         let initial_spin = Vector3::new(impact.back_spin, impact.side_spin, impact.gyro_spin);
-        let cartesian_spin = impact.calculate_cartesian_spin(initial_velocity);
+        let cartesian_spin = impact.calculate_cartesian_spin(&initial_velocity);
+
         let omega = cartesian_spin.magnitude();
         let omega_r = omega_to_omega_r(ball.circumference, omega);
+
         let wind_velocity = environment.calculate_wind_velocity();
 
         Self {
@@ -99,6 +105,10 @@ impl State {
 
     pub fn get_velocity(&self) -> (f32, f32, f32) {
         (self.velocity[0], self.velocity[1], self.velocity[2])
+    }
+
+    pub fn get_spin(&self) -> (f32, f32, f32) {
+        (self.spin[0], self.spin[1], self.spin[2])
     }
 }
 

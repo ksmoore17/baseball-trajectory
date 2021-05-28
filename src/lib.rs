@@ -40,4 +40,3 @@ mod tests {
         assert_eq!(state.get_position(), (0.0, 421.509, -0.25));
     }
 }
-
